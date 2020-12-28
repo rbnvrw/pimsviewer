@@ -56,6 +56,10 @@ class AnnotatePlugin(Plugin):
 
         self.items = []
 
+    def update_params(self):
+        if 'scalefactor' in self.positions_df.columns:
+            self.scaleInput.setValue(1.0 / self.positions_df['scalefactor'].values[0])
+
     def clearAll(self, image_widget):
         for item in self.items:
             image_widget.removeItemFromScene(item)
@@ -126,6 +130,7 @@ class AnnotatePlugin(Plugin):
             except Exception as exception:
                 QMessageBox.critical(self, "Error", "Cannot load %s: %s" % (fileName, exception))
                 return
+            self.update_params()
 
         if self.app is not None:
             self.app.refreshPlugins()
